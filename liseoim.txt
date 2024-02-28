@@ -1,0 +1,48 @@
+utilisation Api Air quality
+.env = fichier .env pour regrouper en même endroit differente clé 
+    
+appel vers un Api  
+
+import { useEffect , useState } from 'react'; 
+import loader from './assets/loader.svg'
+import './App.css'
+const API_KEY = import.meta.env.VITE_WEATHER_API_KEY 
+
+function App() { 
+  
+   // appel Api 
+  const [weatherData , setWeattherData] = useState(null)
+
+  useEffect(()=> {
+      fetch(`http://api.airvisual.com/v2/nearest_city?key=${API_KEY}`)
+      .then(response =>{
+        console.log(response);
+        return response.json()
+      } )  
+      .then(responseData => {
+        console.log(responseData); 
+
+        // bien formater les données 
+        // exemple 
+        setWeattherData({
+          city : responseData.data.city,
+          country : responseData.data.country,
+          iconID : responseData.data.current.weather.ic,
+          temperature : responseData.data.current.weather.tp,
+        })
+      }) 
+
+// static 
+ return (
+    <main>
+      <div className="loader-container">
+        <img src={loader} alt="loading icon" />
+      </div>
+      <p className="city-name">Antananarivo</p>
+      <p className="country-name">Madagascar</p>
+      <p className="temperature">25°</p>
+      <div className="info-icon-container">
+        <img src="/icons/01d.svg" className="info-icon" alt="Weather icon" />
+      </div>
+    </main>
+  );
